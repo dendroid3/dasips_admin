@@ -73,7 +73,26 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <menu-card :title="'Properties'" :link="'/menu1'"></menu-card>
+                    </div>
+                    <div class="col-md-3">
+                        <menu-card :title="'Land'" :link="'/menu2'"></menu-card>
+                    </div>
+                    <div class="col-md-3">
+                        <menu-card :title="'Contruction'" :link="'/menu3'"></menu-card>
+                    </div>
+                    <div class="col-md-3">
+                        <menu-card :title="'Contruction'" :link="'/menu3'"></menu-card>
+                    </div>
+                </div>
+                
+                <div>
+                    @yield('content')
+                </div>
+            </div>
         </main>
     </div>
 </body>
