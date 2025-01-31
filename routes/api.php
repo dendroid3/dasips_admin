@@ -8,6 +8,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'properties'], function(){
+    Route::get('/view',  [App\Http\Controllers\Api\PropertiesController::class, 'view']);
+    Route::get('/types_and_locations',  [App\Http\Controllers\Api\PropertiesController::class, 'types_and_locations']);
     Route::get('/get',  [App\Http\Controllers\Api\PropertiesController::class, 'get']);
 });
 

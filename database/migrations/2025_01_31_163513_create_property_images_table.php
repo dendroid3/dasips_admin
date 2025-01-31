@@ -11,18 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('properties', function (Blueprint $table) {
+        Schema::create('property_images', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('title');
-            $table->string('property_type');
-            $table->string('location');
-            $table->decimal('price', 10, 2);
-            $table->integer('bedrooms');
-            $table->integer('bathrooms');
-            $table->text('description');
-            $table->boolean('is_active')->default(true);
+            $table->uuid('property_id')->index();
             $table->string('image_url');
-
             $table->timestamps();
         });
     }
@@ -32,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('properties');
+        Schema::dropIfExists('property_images');
     }
 };
