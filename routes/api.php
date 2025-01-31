@@ -13,3 +13,8 @@ Route::group(['prefix' => 'properties'], function(){
     Route::get('/get',  [App\Http\Controllers\Api\PropertiesController::class, 'get']);
 });
 
+Route::group(['prefix' => 'land'], function(){
+    Route::get('/view',  [App\Http\Controllers\Api\LandController::class, 'view']);
+    Route::get('/get',  [App\Http\Controllers\Api\LandController::class, 'get']);
+
+});

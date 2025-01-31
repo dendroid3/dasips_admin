@@ -28,7 +28,7 @@ class PropertiesController extends Controller
             $query->where('location', $request->input('location'));
         }
 
-        $properties = $query-> paginate(1);
+        $properties = $query-> paginate(6);
         return response()->json(
             $properties
         );
