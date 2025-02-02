@@ -4,15 +4,45 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use App\Models\Property;
 
 class PropertiesController extends Controller
 {
-    public function index()
+    public function create(Request $request)
     {
+        // Store primary Image
+        $primary_image = $request -> file('primaryImage');
+        
+        $primary_image_extension = $primary_image->getClientOriginalExtension();
+        $primary_image_file_name = time() . '_' . Str::random(10) . '.' . $primary_image_extension;
+        $primary_image_url = "/storage/" . $primary_image->storeAs('images', $primary_image_file_name, 'public');
+
+        $property = new Property();
+        $property->title = $request-> title;
+        $property->description = $request->description;
+        $property->location = $request->location;
+        $property->property_type = $request->property_type;
+        $property->price = $request->price;
+        $property->bedrooms = $request->bedrooms;
+        $property->bathrooms = $request->bathrooms;
+        $property->is_active = true;
+        $property->image_url = $primary_image_url;
+        $property->save();
+
+        $secondary_images = $request -> file('secondaryImages');
+        foreach ($secondary_images as $image) {
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $imageUrl = "/storage/" . $image->storeAs('images', $filename, 'public');
+            $property->propertyImages()->create([
+                'property_id' => $property -> id,
+                'image_url' => $imageUrl
+            ]);
+        }
+
         return response()->json([
-            'message' => 'Hello World'
+            'message' => 'Property created successfully'
         ]);
     }
 
@@ -52,7 +82,8 @@ class PropertiesController extends Controller
 
     public function types_and_locations(Request $request)
     {
-        $locationsWithTypes = Property::select('location')
+        $locationsWithTypes = Property::where('is_active', true)
+            -> select('location')
             ->distinct()
             ->get()
             ->map(function ($location) {
@@ -66,5 +97,23 @@ class PropertiesController extends Controller
         return response()->json(
             $locationsWithTypes
         );
+    }
+
+    public function delete(Request $request)
+    {
+        $property = Property::find($request->property_id);
+
+        if(!$property) {
+            return response()->json([
+                'message' => 'Property not found'
+            ], 404);
+        }
+
+        $property->is_active = false;
+        $property->save();
+
+        return response()->json([
+            'message' => 'Property deleted successfully'
+        ]);
     }
 }

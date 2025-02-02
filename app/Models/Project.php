@@ -9,4 +9,12 @@ class Project extends Model
 {
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'location',
+        'type',
+        'image_url'
+    ];
 }

@@ -1,9 +1,12 @@
 <template>
-  <div class="card">
+  <div 
+    class="card pointer"
+    @click="navigate"
+  >
     <div class="card-header">{{ title }}</div>
     <div class="card-body">
       <slot></slot>
-      {{ "Hello" }}
+      {{ count }}
     </div>
   </div>
 </template>
@@ -11,8 +14,30 @@
 export default {
   props: [
     'title',
-    'link'
-  ]
+    'link',
+    'url'
+  ],
+
+  data() {
+    return {
+      count: 0
+    }
+  },
+
+  methods: {
+    navigate() {
+      window.location.href = this.link;
+    }
+  },
+
+  mounted() {
+    fetch(`${this.url}`)
+      .then(response => response.json())
+      .then(data => {
+        this.count = data;
+      })
+      .then(json => console.log(json))
+    }
 }
 </script>
 <style scoped>
@@ -29,5 +54,8 @@ export default {
 }
 .card-body {
   padding: 1.25rem;
+}
+.pointer{
+  cursor: pointer;
 }
 </style>

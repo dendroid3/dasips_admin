@@ -12,15 +12,17 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -54,6 +56,20 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('properties') }}">{{ __('Properties') }}</a>
+                                </li>
+
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('lands') }}">{{ __('Land') }}</a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('projects') }}">{{ __('Projects') }}</a>
+                                </li>
+
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -74,24 +90,27 @@
 
         <main class="py-4">
             <div class="container">
-                <div class="row">
+            @guest
+                @yield('content')
+            @else
+
+                <div class="row justify-content-center">
                     <div class="col-md-3">
-                        <menu-card :title="'Properties'" :link="'/menu1'"></menu-card>
+                        <menu-card :title="'Properties'" :url="'{{ env('APP_URL') }}/api/statistics/property'" :link="'properties'"></menu-card>
                     </div>
                     <div class="col-md-3">
-                        <menu-card :title="'Land'" :link="'/menu2'"></menu-card>
+                        <menu-card :title="'Land'" :url="'{{ env('APP_URL') }}/api/statistics/land'" :link="'/lands'"></menu-card>
                     </div>
                     <div class="col-md-3">
-                        <menu-card :title="'Contruction'" :link="'/menu3'"></menu-card>
-                    </div>
-                    <div class="col-md-3">
-                        <menu-card :title="'Contruction'" :link="'/menu3'"></menu-card>
+                        <menu-card :title="'Projects'" :url="'{{ env('APP_URL') }}/api/statistics/project'" :link="'/projects'"></menu-card>
                     </div>
                 </div>
                 
                 <div>
                     @yield('content')
                 </div>
+                @endguest
+
             </div>
         </main>
     </div>
